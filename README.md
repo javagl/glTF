@@ -18,7 +18,7 @@ Please provide feedback by submitting [issues](https://github.com/KhronosGroup/g
 ## Overview
 
 <p align="center">
-<a href="specification/1.0/figures/gltfOverview-0.2.0.png"><img src="specification/1.0/figures/gltfOverview-0.2.0-small.png" /></a>
+<a href="specification/1.1/figures/gltfOverview-1.1.0.png"><img src="specification/1.1/figures/gltfOverview-1.1.0-small.png" /></a>
 </p>
 Diagram by [Marco Hutter](http://marco-hutter.de/) ([repo](https://github.com/javagl/gltfOverview)).
 
