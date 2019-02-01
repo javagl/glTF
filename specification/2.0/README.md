@@ -1657,41 +1657,41 @@ This chunk must be padded with trailing zeros (`0x00`) to satisfy alignment requ
 # Properties Reference
 
 ## Objects
-* [`accessor`](#reference-accessor)
-   * [`sparse`](#reference-sparse)
-      * [`indices`](#reference-indices)
-      * [`values`](#reference-values)
-* [`animation`](#reference-animation)
-   * [`animation sampler`](#reference-animation-sampler)
-   * [`channel`](#reference-channel)
-      * [`target`](#reference-target)
-* [`asset`](#reference-asset)
-* [`buffer`](#reference-buffer)
-* [`bufferView`](#reference-bufferview)
-* [`camera`](#reference-camera)
-   * [`orthographic`](#reference-orthographic)
-   * [`perspective`](#reference-perspective)
-* [`extension`](#reference-extension)
-* [`extras`](#reference-extras)
+* [`Accessor`](#reference-accessor)
+   * [`Sparse`](#reference-accessor-sparse)
+      * [`Indices`](#reference-accessor-sparse-indices)
+      * [`Values`](#reference-accessor-sparse-values)
+* [`Animation`](#reference-animation)
+   * [`Channel`](#reference-animation-channel)
+      * [`Target`](#reference-animation-channel-target)
+   * [`Sampler`](#reference-animation-sampler)
+* [`Asset`](#reference-asset)
+* [`Buffer`](#reference-buffer)
+* [`Buffer View`](#reference-bufferview)
+* [`Camera`](#reference-camera)
+   * [`Orthographic`](#reference-camera-orthographic)
+   * [`Perspective`](#reference-camera-perspective)
+* [`Extension`](#reference-extension)
+* [`Extras`](#reference-extras)
 * [`glTF`](#reference-gltf) (root object)
-* [`image`](#reference-image)
-* [`material`](#reference-material)
-   * [`normalTextureInfo`](#reference-normaltextureinfo)
-   * [`occlusionTextureInfo`](#reference-occlusiontextureinfo)
-   * [`pbrMetallicRoughness`](#reference-pbrmetallicroughness)
-* [`mesh`](#reference-mesh)
-   * [`primitive`](#reference-primitive)
-* [`node`](#reference-node)
-* [`sampler`](#reference-sampler)
-* [`scene`](#reference-scene)
-* [`skin`](#reference-skin)
-* [`texture`](#reference-texture)
-* [`textureInfo`](#reference-textureinfo)
+* [`Image`](#reference-image)
+* [`Material`](#reference-material)
+   * [`Normal Texture Info`](#reference-material-normaltextureinfo)
+   * [`Occlusion Texture Info`](#reference-material-occlusiontextureinfo)
+   * [`PBR Metallic Roughness`](#reference-material-pbrmetallicroughness)
+* [`Mesh`](#reference-mesh)
+   * [`Primitive`](#reference-mesh-primitive)
+* [`Node`](#reference-node)
+* [`Sampler`](#reference-sampler)
+* [`Scene`](#reference-scene)
+* [`Skin`](#reference-skin)
+* [`Texture`](#reference-texture)
+* [`Texture Info`](#reference-textureinfo)
 
 
 ---------------------------------------
 <a name="reference-accessor"></a>
-### accessor
+### Accessor
 
 A typed view into a bufferView.  A bufferView contains raw binary data.  An accessor provides a typed view into a bufferView or a subset of a bufferView similar to how WebGL's `vertexAttribPointer()` defines an attribute in a buffer.
 
@@ -1707,10 +1707,10 @@ A typed view into a bufferView.  A bufferView contains raw binary data.  An acce
 |**type**|`string`|Specifies if the attribute is a scalar, vector, or matrix.| :white_check_mark: Yes|
 |**max**|`number` `[1-16]`|Maximum value of each component in this attribute.|No|
 |**min**|`number` `[1-16]`|Minimum value of each component in this attribute.|No|
-|**sparse**|`object`|Sparse storage of attributes that deviate from their initialization value.|No|
+|**sparse**|[`accessor.sparse`](#reference-accessor-sparse)|Sparse storage of attributes that deviate from their initialization value.|No|
 |**name**|`string`|The user-defined name of this object.|No|
-|**extensions**|`object`|Dictionary object with extension-specific objects.|No|
-|**extras**|`any`|Application-specific data.|No|
+|**extensions**|[`extension`](#reference-extension)|Dictionary object with extension-specific objects.|No|
+|**extras**|[`extras`](#reference-extras)|Application-specific data.|No|
 
 Additional properties are allowed.
 
@@ -1718,7 +1718,7 @@ Additional properties are allowed.
 
 #### accessor.bufferView
 
-The index of the bufferView. When not defined, accessor must be initialized with zeros; [`sparse`](#reference-sparse) property or extensions could override zeros with actual values.
+The index of the bufferView. When not defined, accessor must be initialized with zeros; `sparse` property or extensions could override zeros with actual values.
 
 * **Type**: `integer`
 * **Required**: No
@@ -1801,7 +1801,7 @@ Minimum value of each component in this attribute.  Array elements must be treat
 
 Sparse storage of attributes that deviate from their initialization value.
 
-* **Type**: `object`
+* **Type**: [`accessor.sparse`](#reference-accessor-sparse)
 * **Required**: No
 
 #### accessor.name
@@ -1815,15 +1815,193 @@ The user-defined name of this object.  This is not necessarily unique, e.g., an 
 
 Dictionary object with extension-specific objects.
 
-* **Type**: `object`
+* **Type**: [`extension`](#reference-extension)
 * **Required**: No
-* **Type of each property**: extension
+* **Type of each property**: Extension
 
 #### accessor.extras
 
 Application-specific data.
 
-* **Type**: `any`
+* **Type**: [`extras`](#reference-extras)
+* **Required**: No
+
+
+
+
+---------------------------------------
+<a name="reference-accessor-sparse"></a>
+### Accessor Sparse
+
+Sparse storage of attributes that deviate from their initialization value.
+
+**Properties**
+
+|   |Type|Description|Required|
+|---|----|-----------|--------|
+|**count**|`integer`|Number of entries stored in the sparse array.| :white_check_mark: Yes|
+|**indices**|[`accessor.sparse.indices`](#reference-accessor-sparse-indices)|Index array of size `count` that points to those accessor attributes that deviate from their initialization value. Indices must strictly increase.| :white_check_mark: Yes|
+|**values**|[`accessor.sparse.values`](#reference-accessor-sparse-values)|Array of size `count` times number of components, storing the displaced accessor attributes pointed by `indices`. Substituted values must have the same `componentType` and number of components as the base accessor.| :white_check_mark: Yes|
+|**extensions**|[`extension`](#reference-extension)|Dictionary object with extension-specific objects.|No|
+|**extras**|[`extras`](#reference-extras)|Application-specific data.|No|
+
+Additional properties are allowed.
+
+* **JSON schema**: [accessor.sparse.schema.json](schema/accessor.sparse.schema.json)
+
+#### accessor.sparse.count :white_check_mark: 
+
+The number of attributes encoded in this sparse accessor.
+
+* **Type**: `integer`
+* **Required**: Yes
+* **Minimum**: ` >= 1`
+
+#### accessor.sparse.indices :white_check_mark: 
+
+Index array of size `count` that points to those accessor attributes that deviate from their initialization value. Indices must strictly increase.
+
+* **Type**: [`accessor.sparse.indices`](#reference-accessor-sparse-indices)
+* **Required**: Yes
+
+#### accessor.sparse.values :white_check_mark: 
+
+Array of size `count` times number of components, storing the displaced accessor attributes pointed by `indices`. Substituted values must have the same `componentType` and number of components as the base accessor.
+
+* **Type**: [`accessor.sparse.values`](#reference-accessor-sparse-values)
+* **Required**: Yes
+
+#### accessor.sparse.extensions
+
+Dictionary object with extension-specific objects.
+
+* **Type**: [`extension`](#reference-extension)
+* **Required**: No
+* **Type of each property**: Extension
+
+#### accessor.sparse.extras
+
+Application-specific data.
+
+* **Type**: [`extras`](#reference-extras)
+* **Required**: No
+
+
+
+
+---------------------------------------
+<a name="reference-accessor-sparse-indices"></a>
+### Accessor Sparse Indices
+
+Indices of those attributes that deviate from their initialization value.
+
+**Properties**
+
+|   |Type|Description|Required|
+|---|----|-----------|--------|
+|**bufferView**|`integer`|The index of the bufferView with sparse indices. Referenced bufferView can't have ARRAY_BUFFER or ELEMENT_ARRAY_BUFFER target.| :white_check_mark: Yes|
+|**byteOffset**|`integer`|The offset relative to the start of the bufferView in bytes. Must be aligned.|No, default: `0`|
+|**componentType**|`integer`|The indices data type.| :white_check_mark: Yes|
+|**extensions**|[`extension`](#reference-extension)|Dictionary object with extension-specific objects.|No|
+|**extras**|[`extras`](#reference-extras)|Application-specific data.|No|
+
+Additional properties are allowed.
+
+* **JSON schema**: [accessor.sparse.indices.schema.json](schema/accessor.sparse.indices.schema.json)
+
+#### accessor.sparse.indices.bufferView :white_check_mark: 
+
+The index of the bufferView with sparse indices. Referenced bufferView can't have ARRAY_BUFFER or ELEMENT_ARRAY_BUFFER target.
+
+* **Type**: `integer`
+* **Required**: Yes
+* **Minimum**: ` >= 0`
+
+#### accessor.sparse.indices.byteOffset
+
+The offset relative to the start of the bufferView in bytes. Must be aligned.
+
+* **Type**: `integer`
+* **Required**: No, default: `0`
+* **Minimum**: ` >= 0`
+
+#### accessor.sparse.indices.componentType :white_check_mark: 
+
+The indices data type.  Valid values correspond to WebGL enums: `5121` (UNSIGNED_BYTE), `5123` (UNSIGNED_SHORT), `5125` (UNSIGNED_INT).
+
+* **Type**: `integer`
+* **Required**: Yes
+* **Allowed values**:
+   * `5121` UNSIGNED_BYTE
+   * `5123` UNSIGNED_SHORT
+   * `5125` UNSIGNED_INT
+
+#### accessor.sparse.indices.extensions
+
+Dictionary object with extension-specific objects.
+
+* **Type**: [`extension`](#reference-extension)
+* **Required**: No
+* **Type of each property**: Extension
+
+#### accessor.sparse.indices.extras
+
+Application-specific data.
+
+* **Type**: [`extras`](#reference-extras)
+* **Required**: No
+
+
+
+
+---------------------------------------
+<a name="reference-accessor-sparse-values"></a>
+### Accessor Sparse Values
+
+Array of size `accessor.sparse.count` times number of components storing the displaced accessor attributes pointed by `accessor.sparse.indices`.
+
+**Properties**
+
+|   |Type|Description|Required|
+|---|----|-----------|--------|
+|**bufferView**|`integer`|The index of the bufferView with sparse values. Referenced bufferView can't have ARRAY_BUFFER or ELEMENT_ARRAY_BUFFER target.| :white_check_mark: Yes|
+|**byteOffset**|`integer`|The offset relative to the start of the bufferView in bytes. Must be aligned.|No, default: `0`|
+|**extensions**|[`extension`](#reference-extension)|Dictionary object with extension-specific objects.|No|
+|**extras**|[`extras`](#reference-extras)|Application-specific data.|No|
+
+Additional properties are allowed.
+
+* **JSON schema**: [accessor.sparse.values.schema.json](schema/accessor.sparse.values.schema.json)
+
+#### accessor.sparse.values.bufferView :white_check_mark: 
+
+The index of the bufferView with sparse values. Referenced bufferView can't have ARRAY_BUFFER or ELEMENT_ARRAY_BUFFER target.
+
+* **Type**: `integer`
+* **Required**: Yes
+* **Minimum**: ` >= 0`
+
+#### accessor.sparse.values.byteOffset
+
+The offset relative to the start of the bufferView in bytes. Must be aligned.
+
+* **Type**: `integer`
+* **Required**: No, default: `0`
+* **Minimum**: ` >= 0`
+
+#### accessor.sparse.values.extensions
+
+Dictionary object with extension-specific objects.
+
+* **Type**: [`extension`](#reference-extension)
+* **Required**: No
+* **Type of each property**: Extension
+
+#### accessor.sparse.values.extras
+
+Application-specific data.
+
+* **Type**: [`extras`](#reference-extras)
 * **Required**: No
 
 
@@ -1831,7 +2009,7 @@ Application-specific data.
 
 ---------------------------------------
 <a name="reference-animation"></a>
-### animation
+### Animation
 
 A keyframe animation.
 
@@ -1839,11 +2017,11 @@ A keyframe animation.
 
 |   |Type|Description|Required|
 |---|----|-----------|--------|
-|**channels**|channel `[1-*]`|An array of channels, each of which targets an animation's sampler at a node's property. Different channels of the same animation can't have equal targets.| :white_check_mark: Yes|
-|**samplers**|animation sampler `[1-*]`|An array of samplers that combines input and output accessors with an interpolation algorithm to define a keyframe graph (but not its target).| :white_check_mark: Yes|
+|**channels**|[`animation.channel`](#reference-animation-channel) `[1-*]`|An array of channels, each of which targets an animation's sampler at a node's property. Different channels of the same animation can't have equal targets.| :white_check_mark: Yes|
+|**samplers**|[`animation.sampler`](#reference-animation-sampler) `[1-*]`|An array of samplers that combines input and output accessors with an interpolation algorithm to define a keyframe graph (but not its target).| :white_check_mark: Yes|
 |**name**|`string`|The user-defined name of this object.|No|
-|**extensions**|`object`|Dictionary object with extension-specific objects.|No|
-|**extras**|`any`|Application-specific data.|No|
+|**extensions**|[`extension`](#reference-extension)|Dictionary object with extension-specific objects.|No|
+|**extras**|[`extras`](#reference-extras)|Application-specific data.|No|
 
 Additional properties are allowed.
 
@@ -1853,14 +2031,14 @@ Additional properties are allowed.
 
 An array of channels, each of which targets an animation's sampler at a node's property. Different channels of the same animation can't have equal targets.
 
-* **Type**: channel `[1-*]`
+* **Type**: [`animation.channel`](#reference-animation-channel) `[1-*]`
 * **Required**: Yes
 
 #### animation.samplers :white_check_mark: 
 
 An array of samplers that combines input and output accessors with an interpolation algorithm to define a keyframe graph (but not its target).
 
-* **Type**: animation sampler `[1-*]`
+* **Type**: [`animation.sampler`](#reference-animation-sampler) `[1-*]`
 * **Required**: Yes
 
 #### animation.name
@@ -1874,15 +2052,124 @@ The user-defined name of this object.  This is not necessarily unique, e.g., an 
 
 Dictionary object with extension-specific objects.
 
-* **Type**: `object`
+* **Type**: [`extension`](#reference-extension)
 * **Required**: No
-* **Type of each property**: extension
+* **Type of each property**: Extension
 
 #### animation.extras
 
 Application-specific data.
 
-* **Type**: `any`
+* **Type**: [`extras`](#reference-extras)
+* **Required**: No
+
+
+
+
+---------------------------------------
+<a name="reference-animation-channel"></a>
+### Animation Channel
+
+Targets an animation's sampler at a node's property.
+
+**Properties**
+
+|   |Type|Description|Required|
+|---|----|-----------|--------|
+|**sampler**|`integer`|The index of a sampler in this animation used to compute the value for the target.| :white_check_mark: Yes|
+|**target**|[`animation.channel.target`](#reference-animation-channel-target)|The index of the node and TRS property to target.| :white_check_mark: Yes|
+|**extensions**|[`extension`](#reference-extension)|Dictionary object with extension-specific objects.|No|
+|**extras**|[`extras`](#reference-extras)|Application-specific data.|No|
+
+Additional properties are allowed.
+
+* **JSON schema**: [animation.channel.schema.json](schema/animation.channel.schema.json)
+
+#### animation.channel.sampler :white_check_mark: 
+
+The index of a sampler in this animation used to compute the value for the target, e.g., a node's translation, rotation, or scale (TRS).
+
+* **Type**: `integer`
+* **Required**: Yes
+* **Minimum**: ` >= 0`
+
+#### animation.channel.target :white_check_mark: 
+
+The index of the node and TRS property to target.
+
+* **Type**: [`animation.channel.target`](#reference-animation-channel-target)
+* **Required**: Yes
+
+#### animation.channel.extensions
+
+Dictionary object with extension-specific objects.
+
+* **Type**: [`extension`](#reference-extension)
+* **Required**: No
+* **Type of each property**: Extension
+
+#### animation.channel.extras
+
+Application-specific data.
+
+* **Type**: [`extras`](#reference-extras)
+* **Required**: No
+
+
+
+
+---------------------------------------
+<a name="reference-animation-channel-target"></a>
+### Animation Channel Target
+
+The index of the node and TRS property that an animation channel targets.
+
+**Properties**
+
+|   |Type|Description|Required|
+|---|----|-----------|--------|
+|**node**|`integer`|The index of the node to target.|No|
+|**path**|`string`|The name of the node's TRS property to modify, or the "weights" of the Morph Targets it instantiates. For the "translation" property, the values that are provided by the sampler are the translation along the x, y, and z axes. For the "rotation" property, the values are a quaternion in the order (x, y, z, w), where w is the scalar. For the "scale" property, the values are the scaling factors along the x, y, and z axes.| :white_check_mark: Yes|
+|**extensions**|[`extension`](#reference-extension)|Dictionary object with extension-specific objects.|No|
+|**extras**|[`extras`](#reference-extras)|Application-specific data.|No|
+
+Additional properties are allowed.
+
+* **JSON schema**: [animation.channel.target.schema.json](schema/animation.channel.target.schema.json)
+
+#### animation.channel.target.node
+
+The index of the node to target.
+
+* **Type**: `integer`
+* **Required**: No
+* **Minimum**: ` >= 0`
+
+#### animation.channel.target.path :white_check_mark: 
+
+The name of the node's TRS property to modify, or the "weights" of the Morph Targets it instantiates. For the "translation" property, the values that are provided by the sampler are the translation along the x, y, and z axes. For the "rotation" property, the values are a quaternion in the order (x, y, z, w), where w is the scalar. For the "scale" property, the values are the scaling factors along the x, y, and z axes.
+
+* **Type**: `string`
+* **Required**: Yes
+* **Allowed values**:
+   * `"translation"`
+   * `"rotation"`
+   * `"scale"`
+   * `"weights"`
+
+#### animation.channel.target.extensions
+
+Dictionary object with extension-specific objects.
+
+* **Type**: [`extension`](#reference-extension)
+* **Required**: No
+* **Type of each property**: Extension
+
+#### animation.channel.target.extras
+
+Application-specific data.
+
+* **Type**: [`extras`](#reference-extras)
 * **Required**: No
 
 
@@ -1890,7 +2177,7 @@ Application-specific data.
 
 ---------------------------------------
 <a name="reference-animation-sampler"></a>
-### animation sampler
+### Animation Sampler
 
 Combines input and output accessors with an interpolation algorithm to define a keyframe graph (but not its target).
 
@@ -1901,14 +2188,14 @@ Combines input and output accessors with an interpolation algorithm to define a 
 |**input**|`integer`|The index of an accessor containing keyframe input values, e.g., time.| :white_check_mark: Yes|
 |**interpolation**|`string`|Interpolation algorithm.|No, default: `"LINEAR"`|
 |**output**|`integer`|The index of an accessor, containing keyframe output values.| :white_check_mark: Yes|
-|**extensions**|`object`|Dictionary object with extension-specific objects.|No|
-|**extras**|`any`|Application-specific data.|No|
+|**extensions**|[`extension`](#reference-extension)|Dictionary object with extension-specific objects.|No|
+|**extras**|[`extras`](#reference-extras)|Application-specific data.|No|
 
 Additional properties are allowed.
 
 * **JSON schema**: [animation.sampler.schema.json](schema/animation.sampler.schema.json)
 
-#### animation sampler.input :white_check_mark: 
+#### animation.sampler.input :white_check_mark: 
 
 The index of an accessor containing keyframe input values, e.g., time. That accessor must have componentType `FLOAT`. The values represent time in seconds with `time[0] >= 0.0`, and strictly increasing values, i.e., `time[n + 1] > time[n]`.
 
@@ -1916,7 +2203,7 @@ The index of an accessor containing keyframe input values, e.g., time. That acce
 * **Required**: Yes
 * **Minimum**: ` >= 0`
 
-#### animation sampler.interpolation
+#### animation.sampler.interpolation
 
 Interpolation algorithm.
 
@@ -1927,27 +2214,27 @@ Interpolation algorithm.
    * `"STEP"` The animated values remain constant to the output of the first keyframe, until the next keyframe. The number of output elements must equal the number of input elements.
    * `"CUBICSPLINE"` The animation's interpolation is computed using a cubic spline with specified tangents. The number of output elements must equal three times the number of input elements. For each input element, the output stores three elements, an in-tangent, a spline vertex, and an out-tangent. There must be at least two keyframes when using this interpolation.
 
-#### animation sampler.output :white_check_mark: 
+#### animation.sampler.output :white_check_mark: 
 
-The index of an accessor containing keyframe output values. When targeting TRS target, the `accessor.componentType` of the output values must be `FLOAT`. When targeting morph weights, the `accessor.componentType` of the output values must be `FLOAT` or normalized integer where each output element stores values with a count equal to the number of morph targets.
+The index of an accessor containing keyframe output values. When targeting translation or scale paths, the `accessor.componentType` of the output values must be `FLOAT`. When targeting rotation or morph weights, the `accessor.componentType` of the output values must be `FLOAT` or normalized integer. For weights, each output element stores `SCALAR` values with a count equal to the number of morph targets.
 
 * **Type**: `integer`
 * **Required**: Yes
 * **Minimum**: ` >= 0`
 
-#### animation sampler.extensions
+#### animation.sampler.extensions
 
 Dictionary object with extension-specific objects.
 
-* **Type**: `object`
+* **Type**: [`extension`](#reference-extension)
 * **Required**: No
-* **Type of each property**: extension
+* **Type of each property**: Extension
 
-#### animation sampler.extras
+#### animation.sampler.extras
 
 Application-specific data.
 
-* **Type**: `any`
+* **Type**: [`extras`](#reference-extras)
 * **Required**: No
 
 
@@ -1955,7 +2242,7 @@ Application-specific data.
 
 ---------------------------------------
 <a name="reference-asset"></a>
-### asset
+### Asset
 
 Metadata about the glTF asset.
 
@@ -1967,8 +2254,8 @@ Metadata about the glTF asset.
 |**generator**|`string`|Tool that generated this glTF model.  Useful for debugging.|No|
 |**version**|`string`|The glTF version that this asset targets.| :white_check_mark: Yes|
 |**minVersion**|`string`|The minimum glTF version that this asset targets.|No|
-|**extensions**|`object`|Dictionary object with extension-specific objects.|No|
-|**extras**|`any`|Application-specific data.|No|
+|**extensions**|[`extension`](#reference-extension)|Dictionary object with extension-specific objects.|No|
+|**extras**|[`extras`](#reference-extras)|Application-specific data.|No|
 
 Additional properties are allowed.
 
@@ -2006,15 +2293,15 @@ The minimum glTF version that this asset targets.
 
 Dictionary object with extension-specific objects.
 
-* **Type**: `object`
+* **Type**: [`extension`](#reference-extension)
 * **Required**: No
-* **Type of each property**: extension
+* **Type of each property**: Extension
 
 #### asset.extras
 
 Application-specific data.
 
-* **Type**: `any`
+* **Type**: [`extras`](#reference-extras)
 * **Required**: No
 
 
@@ -2022,7 +2309,7 @@ Application-specific data.
 
 ---------------------------------------
 <a name="reference-buffer"></a>
-### buffer
+### Buffer
 
 A buffer points to binary geometry, animation, or skins.
 
@@ -2031,10 +2318,10 @@ A buffer points to binary geometry, animation, or skins.
 |   |Type|Description|Required|
 |---|----|-----------|--------|
 |**uri**|`string`|The uri of the buffer.|No|
-|**byteLength**|`integer`|The total byte length of the buffer view.| :white_check_mark: Yes|
+|**byteLength**|`integer`|The length of the buffer in bytes.| :white_check_mark: Yes|
 |**name**|`string`|The user-defined name of this object.|No|
-|**extensions**|`object`|Dictionary object with extension-specific objects.|No|
-|**extras**|`any`|Application-specific data.|No|
+|**extensions**|[`extension`](#reference-extension)|Dictionary object with extension-specific objects.|No|
+|**extras**|[`extras`](#reference-extras)|Application-specific data.|No|
 
 Additional properties are allowed.
 
@@ -2050,7 +2337,7 @@ The uri of the buffer.  Relative paths are relative to the .gltf file.  Instead 
 
 #### buffer.byteLength :white_check_mark: 
 
-The total byte length of the buffer view.
+The length of the buffer in bytes.
 
 * **Type**: `integer`
 * **Required**: Yes
@@ -2067,15 +2354,15 @@ The user-defined name of this object.  This is not necessarily unique, e.g., an 
 
 Dictionary object with extension-specific objects.
 
-* **Type**: `object`
+* **Type**: [`extension`](#reference-extension)
 * **Required**: No
-* **Type of each property**: extension
+* **Type of each property**: Extension
 
 #### buffer.extras
 
 Application-specific data.
 
-* **Type**: `any`
+* **Type**: [`extras`](#reference-extras)
 * **Required**: No
 
 
@@ -2083,7 +2370,7 @@ Application-specific data.
 
 ---------------------------------------
 <a name="reference-bufferview"></a>
-### bufferView
+### Buffer View
 
 A view into a buffer generally representing a subset of the buffer.
 
@@ -2093,12 +2380,12 @@ A view into a buffer generally representing a subset of the buffer.
 |---|----|-----------|--------|
 |**buffer**|`integer`|The index of the buffer.| :white_check_mark: Yes|
 |**byteOffset**|`integer`|The offset into the buffer in bytes.|No, default: `0`|
-|**byteLength**|`integer`|The length of the bufferView in bytes.| :white_check_mark: Yes|
+|**byteLength**|`integer`|The total byte length of the buffer view.| :white_check_mark: Yes|
 |**byteStride**|`integer`|The stride, in bytes.|No|
 |**target**|`integer`|The target that the GPU buffer should be bound to.|No|
 |**name**|`string`|The user-defined name of this object.|No|
-|**extensions**|`object`|Dictionary object with extension-specific objects.|No|
-|**extras**|`any`|Application-specific data.|No|
+|**extensions**|[`extension`](#reference-extension)|Dictionary object with extension-specific objects.|No|
+|**extras**|[`extras`](#reference-extras)|Application-specific data.|No|
 
 Additional properties are allowed.
 
@@ -2122,7 +2409,7 @@ The offset into the buffer in bytes.
 
 #### bufferView.byteLength :white_check_mark: 
 
-The length of the bufferView in bytes.
+The total byte length of the buffer view.
 
 * **Type**: `integer`
 * **Required**: Yes
@@ -2160,15 +2447,15 @@ The user-defined name of this object.  This is not necessarily unique, e.g., an 
 
 Dictionary object with extension-specific objects.
 
-* **Type**: `object`
+* **Type**: [`extension`](#reference-extension)
 * **Required**: No
-* **Type of each property**: extension
+* **Type of each property**: Extension
 
 #### bufferView.extras
 
 Application-specific data.
 
-* **Type**: `any`
+* **Type**: [`extras`](#reference-extras)
 * **Required**: No
 
 
@@ -2176,7 +2463,7 @@ Application-specific data.
 
 ---------------------------------------
 <a name="reference-camera"></a>
-### camera
+### Camera
 
 A camera's projection.  A node can reference a camera to apply a transform to place the camera in the scene.
 
@@ -2184,12 +2471,12 @@ A camera's projection.  A node can reference a camera to apply a transform to pl
 
 |   |Type|Description|Required|
 |---|----|-----------|--------|
-|**orthographic**|`object`|An orthographic camera containing properties to create an orthographic projection matrix.|No|
-|**perspective**|`object`|A perspective camera containing properties to create a perspective projection matrix.|No|
+|**orthographic**|[`camera.orthographic`](#reference-camera-orthographic)|An orthographic camera containing properties to create an orthographic projection matrix.|No|
+|**perspective**|[`camera.perspective`](#reference-camera-perspective)|A perspective camera containing properties to create a perspective projection matrix.|No|
 |**type**|`string`|Specifies if the camera uses a perspective or orthographic projection.| :white_check_mark: Yes|
 |**name**|`string`|The user-defined name of this object.|No|
-|**extensions**|`object`|Dictionary object with extension-specific objects.|No|
-|**extras**|`any`|Application-specific data.|No|
+|**extensions**|[`extension`](#reference-extension)|Dictionary object with extension-specific objects.|No|
+|**extras**|[`extras`](#reference-extras)|Application-specific data.|No|
 
 Additional properties are allowed.
 
@@ -2199,19 +2486,19 @@ Additional properties are allowed.
 
 An orthographic camera containing properties to create an orthographic projection matrix.
 
-* **Type**: `object`
+* **Type**: [`camera.orthographic`](#reference-camera-orthographic)
 * **Required**: No
 
 #### camera.perspective
 
 A perspective camera containing properties to create a perspective projection matrix.
 
-* **Type**: `object`
+* **Type**: [`camera.perspective`](#reference-camera-perspective)
 * **Required**: No
 
 #### camera.type :white_check_mark: 
 
-Specifies if the camera uses a perspective or orthographic projection.  Based on this, either the camera's [`perspective`](#reference-perspective) or [`orthographic`](#reference-orthographic) property will be defined.
+Specifies if the camera uses a perspective or orthographic projection.  Based on this, either the camera's `perspective` or `orthographic` property will be defined.
 
 * **Type**: `string`
 * **Required**: Yes
@@ -2230,67 +2517,155 @@ The user-defined name of this object.  This is not necessarily unique, e.g., an 
 
 Dictionary object with extension-specific objects.
 
-* **Type**: `object`
+* **Type**: [`extension`](#reference-extension)
 * **Required**: No
-* **Type of each property**: extension
+* **Type of each property**: Extension
 
 #### camera.extras
 
 Application-specific data.
 
-* **Type**: `any`
+* **Type**: [`extras`](#reference-extras)
 * **Required**: No
 
 
 
 
 ---------------------------------------
-<a name="reference-channel"></a>
-### channel
+<a name="reference-camera-orthographic"></a>
+### Camera Orthographic
 
-Targets an animation's sampler at a node's property.
+An orthographic camera containing properties to create an orthographic projection matrix.
 
 **Properties**
 
 |   |Type|Description|Required|
 |---|----|-----------|--------|
-|**sampler**|`integer`|The index of a sampler in this animation used to compute the value for the target.| :white_check_mark: Yes|
-|**target**|`object`|The index of the node and TRS property to target.| :white_check_mark: Yes|
-|**extensions**|`object`|Dictionary object with extension-specific objects.|No|
-|**extras**|`any`|Application-specific data.|No|
+|**xmag**|`number`|The floating-point horizontal magnification of the view. Must not be zero.| :white_check_mark: Yes|
+|**ymag**|`number`|The floating-point vertical magnification of the view. Must not be zero.| :white_check_mark: Yes|
+|**zfar**|`number`|The floating-point distance to the far clipping plane. `zfar` must be greater than `znear`.| :white_check_mark: Yes|
+|**znear**|`number`|The floating-point distance to the near clipping plane.| :white_check_mark: Yes|
+|**extensions**|[`extension`](#reference-extension)|Dictionary object with extension-specific objects.|No|
+|**extras**|[`extras`](#reference-extras)|Application-specific data.|No|
 
 Additional properties are allowed.
 
-* **JSON schema**: [animation.channel.schema.json](schema/animation.channel.schema.json)
+* **JSON schema**: [camera.orthographic.schema.json](schema/camera.orthographic.schema.json)
 
-#### channel.sampler :white_check_mark: 
+#### camera.orthographic.xmag :white_check_mark: 
 
-The index of a sampler in this animation used to compute the value for the target, e.g., a node's translation, rotation, or scale (TRS).
+The floating-point horizontal magnification of the view. Must not be zero.
 
-* **Type**: `integer`
+* **Type**: `number`
+* **Required**: Yes
+
+#### camera.orthographic.ymag :white_check_mark: 
+
+The floating-point vertical magnification of the view. Must not be zero.
+
+* **Type**: `number`
+* **Required**: Yes
+
+#### camera.orthographic.zfar :white_check_mark: 
+
+The floating-point distance to the far clipping plane. `zfar` must be greater than `znear`.
+
+* **Type**: `number`
+* **Required**: Yes
+* **Minimum**: ` > 0`
+
+#### camera.orthographic.znear :white_check_mark: 
+
+The floating-point distance to the near clipping plane.
+
+* **Type**: `number`
 * **Required**: Yes
 * **Minimum**: ` >= 0`
 
-#### channel.target :white_check_mark: 
-
-The index of the node and TRS property to target.
-
-* **Type**: `object`
-* **Required**: Yes
-
-#### channel.extensions
+#### camera.orthographic.extensions
 
 Dictionary object with extension-specific objects.
 
-* **Type**: `object`
+* **Type**: [`extension`](#reference-extension)
 * **Required**: No
-* **Type of each property**: extension
+* **Type of each property**: Extension
 
-#### channel.extras
+#### camera.orthographic.extras
 
 Application-specific data.
 
-* **Type**: `any`
+* **Type**: [`extras`](#reference-extras)
+* **Required**: No
+
+
+
+
+---------------------------------------
+<a name="reference-camera-perspective"></a>
+### Camera Perspective
+
+A perspective camera containing properties to create a perspective projection matrix.
+
+**Properties**
+
+|   |Type|Description|Required|
+|---|----|-----------|--------|
+|**aspectRatio**|`number`|The floating-point aspect ratio of the field of view.|No|
+|**yfov**|`number`|The floating-point vertical field of view in radians.| :white_check_mark: Yes|
+|**zfar**|`number`|The floating-point distance to the far clipping plane.|No|
+|**znear**|`number`|The floating-point distance to the near clipping plane.| :white_check_mark: Yes|
+|**extensions**|[`extension`](#reference-extension)|Dictionary object with extension-specific objects.|No|
+|**extras**|[`extras`](#reference-extras)|Application-specific data.|No|
+
+Additional properties are allowed.
+
+* **JSON schema**: [camera.perspective.schema.json](schema/camera.perspective.schema.json)
+
+#### camera.perspective.aspectRatio
+
+The floating-point aspect ratio of the field of view. When this is undefined, the aspect ratio of the canvas is used.
+
+* **Type**: `number`
+* **Required**: No
+* **Minimum**: ` > 0`
+
+#### camera.perspective.yfov :white_check_mark: 
+
+The floating-point vertical field of view in radians.
+
+* **Type**: `number`
+* **Required**: Yes
+* **Minimum**: ` > 0`
+
+#### camera.perspective.zfar
+
+The floating-point distance to the far clipping plane. When defined, `zfar` must be greater than `znear`. If `zfar` is undefined, runtime must use infinite projection matrix.
+
+* **Type**: `number`
+* **Required**: No
+* **Minimum**: ` > 0`
+
+#### camera.perspective.znear :white_check_mark: 
+
+The floating-point distance to the near clipping plane.
+
+* **Type**: `number`
+* **Required**: Yes
+* **Minimum**: ` > 0`
+
+#### camera.perspective.extensions
+
+Dictionary object with extension-specific objects.
+
+* **Type**: [`extension`](#reference-extension)
+* **Required**: No
+* **Type of each property**: Extension
+
+#### camera.perspective.extras
+
+Application-specific data.
+
+* **Type**: [`extras`](#reference-extras)
 * **Required**: No
 
 
@@ -2298,7 +2673,7 @@ Application-specific data.
 
 ---------------------------------------
 <a name="reference-extension"></a>
-### extension
+### Extension
 
 Dictionary object with extension-specific objects.
 
@@ -2311,13 +2686,11 @@ Additional properties are allowed.
 
 ---------------------------------------
 <a name="reference-extras"></a>
-### extras
+### Extras
 
 Application-specific data.
 
-> **Implementation Note:** Although extras may have any type, it is common for applications to
-store and access custom data as key/value pairs. As best practice, extras should be an Object
-rather than a primitive value for best portability.
+
 
 ---------------------------------------
 <a name="reference-gltf"></a>
@@ -2331,29 +2704,29 @@ The root object for a glTF asset.
 |---|----|-----------|--------|
 |**extensionsUsed**|`string` `[1-*]`|Names of glTF extensions used somewhere in this asset.|No|
 |**extensionsRequired**|`string` `[1-*]`|Names of glTF extensions required to properly load this asset.|No|
-|**accessors**|accessor `[1-*]`|An array of accessors.|No|
-|**animations**|animation `[1-*]`|An array of keyframe animations.|No|
-|**asset**|`object`|Metadata about the glTF asset.|Yes|
-|**buffers**|buffer `[1-*]`|An array of buffers.|No|
-|**bufferViews**|bufferView `[1-*]`|An array of bufferViews.|No|
-|**cameras**|camera `[1-*]`|An array of cameras.|No|
-|**images**|image `[1-*]`|An array of images.|No|
-|**materials**|material `[1-*]`|An array of materials.|No|
-|**meshes**|mesh `[1-*]`|An array of meshes.|No|
-|**nodes**|node `[1-*]`|An array of nodes.|No|
-|**samplers**|sampler `[1-*]`|An array of samplers.|No|
+|**accessors**|[`accessor`](#reference-accessor) `[1-*]`|An array of accessors.|No|
+|**animations**|[`animation`](#reference-animation) `[1-*]`|An array of keyframe animations.|No|
+|**asset**|[`asset`](#reference-asset)|Metadata about the glTF asset.|No|
+|**buffers**|[`buffer`](#reference-buffer) `[1-*]`|An array of buffers.|No|
+|**bufferViews**|[`bufferView`](#reference-bufferview) `[1-*]`|An array of bufferViews.|No|
+|**cameras**|[`camera`](#reference-camera) `[1-*]`|An array of cameras.|No|
+|**images**|[`image`](#reference-image) `[1-*]`|An array of images.|No|
+|**materials**|[`material`](#reference-material) `[1-*]`|An array of materials.|No|
+|**meshes**|[`mesh`](#reference-mesh) `[1-*]`|An array of meshes.|No|
+|**nodes**|[`node`](#reference-node) `[1-*]`|An array of nodes.|No|
+|**samplers**|[`sampler`](#reference-sampler) `[1-*]`|An array of samplers.|No|
 |**scene**|`integer`|The index of the default scene.|No|
-|**scenes**|scene `[1-*]`|An array of scenes.|No|
-|**skins**|skin `[1-*]`|An array of skins.|No|
-|**textures**|texture `[1-*]`|An array of textures.|No|
-|**extensions**|`object`|Dictionary object with extension-specific objects.|No|
-|**extras**|`any`|Application-specific data.|No|
+|**scenes**|[`scene`](#reference-scene) `[1-*]`|An array of scenes.|No|
+|**skins**|[`skin`](#reference-skin) `[1-*]`|An array of skins.|No|
+|**textures**|[`texture`](#reference-texture) `[1-*]`|An array of textures.|No|
+|**extensions**|[`extension`](#reference-extension)|Dictionary object with extension-specific objects.|No|
+|**extras**|[`extras`](#reference-extras)|Application-specific data.|No|
 
 Additional properties are allowed.
 
-* **JSON schema**: [glTF.schema.json](schema/glTF.schema.json)
+* **JSON schema**: [gltf.schema.json](schema/gltf.schema.json)
 
-#### glTF.extensionsUsed
+#### gltf.extensionsUsed
 
 Names of glTF extensions used somewhere in this asset.
 
@@ -2361,7 +2734,7 @@ Names of glTF extensions used somewhere in this asset.
    * Each element in the array must be unique.
 * **Required**: No
 
-#### glTF.extensionsRequired
+#### gltf.extensionsRequired
 
 Names of glTF extensions required to properly load this asset.
 
@@ -2369,84 +2742,84 @@ Names of glTF extensions required to properly load this asset.
    * Each element in the array must be unique.
 * **Required**: No
 
-#### glTF.accessors
+#### gltf.accessors
 
 An array of accessors.  An accessor is a typed view into a bufferView.
 
-* **Type**: accessor `[1-*]`
+* **Type**: [`accessor`](#reference-accessor) `[1-*]`
 * **Required**: No
 
-#### glTF.animations
+#### gltf.animations
 
 An array of keyframe animations.
 
-* **Type**: animation `[1-*]`
+* **Type**: [`animation`](#reference-animation) `[1-*]`
 * **Required**: No
 
-#### glTF.asset :white_check_mark: 
+#### gltf.asset
 
 Metadata about the glTF asset.
 
-* **Type**: `object`
-* **Required**: Yes
+* **Type**: [`asset`](#reference-asset)
+* **Required**: No
 
-#### glTF.buffers
+#### gltf.buffers
 
 An array of buffers.  A buffer points to binary geometry, animation, or skins.
 
-* **Type**: buffer `[1-*]`
+* **Type**: [`buffer`](#reference-buffer) `[1-*]`
 * **Required**: No
 
-#### glTF.bufferViews
+#### gltf.bufferViews
 
 An array of bufferViews.  A bufferView is a view into a buffer generally representing a subset of the buffer.
 
-* **Type**: bufferView `[1-*]`
+* **Type**: [`bufferView`](#reference-bufferview) `[1-*]`
 * **Required**: No
 
-#### glTF.cameras
+#### gltf.cameras
 
 An array of cameras.  A camera defines a projection matrix.
 
-* **Type**: camera `[1-*]`
+* **Type**: [`camera`](#reference-camera) `[1-*]`
 * **Required**: No
 
-#### glTF.images
+#### gltf.images
 
 An array of images.  An image defines data used to create a texture.
 
-* **Type**: image `[1-*]`
+* **Type**: [`image`](#reference-image) `[1-*]`
 * **Required**: No
 
-#### glTF.materials
+#### gltf.materials
 
 An array of materials.  A material defines the appearance of a primitive.
 
-* **Type**: material `[1-*]`
+* **Type**: [`material`](#reference-material) `[1-*]`
 * **Required**: No
 
-#### glTF.meshes
+#### gltf.meshes
 
 An array of meshes.  A mesh is a set of primitives to be rendered.
 
-* **Type**: mesh `[1-*]`
+* **Type**: [`mesh`](#reference-mesh) `[1-*]`
 * **Required**: No
 
-#### glTF.nodes
+#### gltf.nodes
 
 An array of nodes.
 
-* **Type**: node `[1-*]`
+* **Type**: [`node`](#reference-node) `[1-*]`
 * **Required**: No
 
-#### glTF.samplers
+#### gltf.samplers
 
 An array of samplers.  A sampler contains properties for texture filtering and wrapping modes.
 
-* **Type**: sampler `[1-*]`
+* **Type**: [`sampler`](#reference-sampler) `[1-*]`
 * **Required**: No
 
-#### glTF.scene
+#### gltf.scene
 
 The index of the default scene.
 
@@ -2454,40 +2827,40 @@ The index of the default scene.
 * **Required**: No
 * **Minimum**: ` >= 0`
 
-#### glTF.scenes
+#### gltf.scenes
 
 An array of scenes.
 
-* **Type**: scene `[1-*]`
+* **Type**: [`scene`](#reference-scene) `[1-*]`
 * **Required**: No
 
-#### glTF.skins
+#### gltf.skins
 
 An array of skins.  A skin is defined by joints and matrices.
 
-* **Type**: skin `[1-*]`
+* **Type**: [`skin`](#reference-skin) `[1-*]`
 * **Required**: No
 
-#### glTF.textures
+#### gltf.textures
 
 An array of textures.
 
-* **Type**: texture `[1-*]`
+* **Type**: [`texture`](#reference-texture) `[1-*]`
 * **Required**: No
 
-#### glTF.extensions
+#### gltf.extensions
 
 Dictionary object with extension-specific objects.
 
-* **Type**: `object`
+* **Type**: [`extension`](#reference-extension)
 * **Required**: No
-* **Type of each property**: extension
+* **Type of each property**: Extension
 
-#### glTF.extras
+#### gltf.extras
 
 Application-specific data.
 
-* **Type**: `any`
+* **Type**: [`extras`](#reference-extras)
 * **Required**: No
 
 
@@ -2497,20 +2870,20 @@ Application-specific data.
 
 ---------------------------------------
 <a name="reference-image"></a>
-### image
+### Image
 
-Image data used to create a texture. Image can be referenced by URI or [`bufferView`](#reference-bufferview) index. `mimeType` is required in the latter case.
+Image data used to create a texture. Image can be referenced by URI or `bufferView` index. `mimeType` is required in the latter case.
 
 **Properties**
 
 |   |Type|Description|Required|
 |---|----|-----------|--------|
 |**uri**|`string`|The uri of the image.|No|
-|**mimeType**|`string`|The image's MIME type.|No|
+|**mimeType**|`string`|The image's MIME type. Required if `bufferView` is defined.|No|
 |**bufferView**|`integer`|The index of the bufferView that contains the image. Use this instead of the image's uri property.|No|
 |**name**|`string`|The user-defined name of this object.|No|
-|**extensions**|`object`|Dictionary object with extension-specific objects.|No|
-|**extras**|`any`|Application-specific data.|No|
+|**extensions**|[`extension`](#reference-extension)|Dictionary object with extension-specific objects.|No|
+|**extras**|[`extras`](#reference-extras)|Application-specific data.|No|
 
 Additional properties are allowed.
 
@@ -2553,80 +2926,15 @@ The user-defined name of this object.  This is not necessarily unique, e.g., an 
 
 Dictionary object with extension-specific objects.
 
-* **Type**: `object`
+* **Type**: [`extension`](#reference-extension)
 * **Required**: No
-* **Type of each property**: extension
+* **Type of each property**: Extension
 
 #### image.extras
 
 Application-specific data.
 
-* **Type**: `any`
-* **Required**: No
-
-
-
-
----------------------------------------
-<a name="reference-indices"></a>
-### indices
-
-Indices of those attributes that deviate from their initialization value.
-
-**Properties**
-
-|   |Type|Description|Required|
-|---|----|-----------|--------|
-|**bufferView**|`integer`|The index of the bufferView with sparse indices. Referenced bufferView can't have ARRAY_BUFFER or ELEMENT_ARRAY_BUFFER target.| :white_check_mark: Yes|
-|**byteOffset**|`integer`|The offset relative to the start of the bufferView in bytes. Must be aligned.|No, default: `0`|
-|**componentType**|`integer`|The indices data type.| :white_check_mark: Yes|
-|**extensions**|`object`|Dictionary object with extension-specific objects.|No|
-|**extras**|`any`|Application-specific data.|No|
-
-Additional properties are allowed.
-
-* **JSON schema**: [accessor.sparse.indices.schema.json](schema/accessor.sparse.indices.schema.json)
-
-#### indices.bufferView :white_check_mark: 
-
-The index of the bufferView with sparse indices. Referenced bufferView can't have ARRAY_BUFFER or ELEMENT_ARRAY_BUFFER target.
-
-* **Type**: `integer`
-* **Required**: Yes
-* **Minimum**: ` >= 0`
-
-#### indices.byteOffset
-
-The offset relative to the start of the bufferView in bytes. Must be aligned.
-
-* **Type**: `integer`
-* **Required**: No, default: `0`
-* **Minimum**: ` >= 0`
-
-#### indices.componentType :white_check_mark: 
-
-The indices data type.  Valid values correspond to WebGL enums: `5121` (UNSIGNED_BYTE), `5123` (UNSIGNED_SHORT), `5125` (UNSIGNED_INT).
-
-* **Type**: `integer`
-* **Required**: Yes
-* **Allowed values**:
-   * `5121` UNSIGNED_BYTE
-   * `5123` UNSIGNED_SHORT
-   * `5125` UNSIGNED_INT
-
-#### indices.extensions
-
-Dictionary object with extension-specific objects.
-
-* **Type**: `object`
-* **Required**: No
-* **Type of each property**: extension
-
-#### indices.extras
-
-Application-specific data.
-
-* **Type**: `any`
+* **Type**: [`extras`](#reference-extras)
 * **Required**: No
 
 
@@ -2634,7 +2942,7 @@ Application-specific data.
 
 ---------------------------------------
 <a name="reference-material"></a>
-### material
+### Material
 
 The material appearance of a primitive.
 
@@ -2643,12 +2951,12 @@ The material appearance of a primitive.
 |   |Type|Description|Required|
 |---|----|-----------|--------|
 |**name**|`string`|The user-defined name of this object.|No|
-|**extensions**|`object`|Dictionary object with extension-specific objects.|No|
-|**extras**|`any`|Application-specific data.|No|
-|**pbrMetallicRoughness**|`object`|A set of parameter values that are used to define the metallic-roughness material model from Physically-Based Rendering (PBR) methodology. When not specified, all the default values of [`pbrMetallicRoughness`](#reference-pbrmetallicroughness) apply.|No|
-|**normalTexture**|`object`|The normal map texture.|No|
-|**occlusionTexture**|`object`|The occlusion map texture.|No|
-|**emissiveTexture**|`object`|The emissive map texture.|No|
+|**extensions**|[`extension`](#reference-extension)|Dictionary object with extension-specific objects.|No|
+|**extras**|[`extras`](#reference-extras)|Application-specific data.|No|
+|**pbrMetallicRoughness**|[`material.pbrMetallicRoughness`](#reference-material-pbrmetallicroughness)|A set of parameter values that are used to define the metallic-roughness material model from Physically-Based Rendering (PBR) methodology. When not specified, all the default values of `pbrMetallicRoughness` apply.|No|
+|**normalTexture**|[`material.normalTextureInfo`](#reference-material-normaltextureinfo)|The normal map texture.|No|
+|**occlusionTexture**|[`material.occlusionTextureInfo`](#reference-material-occlusiontextureinfo)|The occlusion map texture.|No|
+|**emissiveTexture**|[`textureInfo`](#reference-textureinfo)|The emissive map texture.|No|
 |**emissiveFactor**|`number` `[3]`|The emissive color of the material.|No, default: `[0,0,0]`|
 |**alphaMode**|`string`|The alpha rendering mode of the material.|No, default: `"OPAQUE"`|
 |**alphaCutoff**|`number`|The alpha cutoff value of the material.|No, default: `0.5`|
@@ -2669,43 +2977,43 @@ The user-defined name of this object.  This is not necessarily unique, e.g., an 
 
 Dictionary object with extension-specific objects.
 
-* **Type**: `object`
+* **Type**: [`extension`](#reference-extension)
 * **Required**: No
-* **Type of each property**: extension
+* **Type of each property**: Extension
 
 #### material.extras
 
 Application-specific data.
 
-* **Type**: `any`
+* **Type**: [`extras`](#reference-extras)
 * **Required**: No
 
 #### material.pbrMetallicRoughness
 
-A set of parameter values that are used to define the metallic-roughness material model from Physically-Based Rendering (PBR) methodology. When not specified, all the default values of [`pbrMetallicRoughness`](#reference-pbrmetallicroughness) apply.
+A set of parameter values that are used to define the metallic-roughness material model from Physically-Based Rendering (PBR) methodology. When not specified, all the default values of `pbrMetallicRoughness` apply.
 
-* **Type**: `object`
+* **Type**: [`material.pbrMetallicRoughness`](#reference-material-pbrmetallicroughness)
 * **Required**: No
 
 #### material.normalTexture
 
-A tangent space normal map. The texture contains RGB components in linear space. Each texel represents the XYZ components of a normal vector in tangent space. Red [0 to 255] maps to X [-1 to 1]. Green [0 to 255] maps to Y [-1 to 1]. Blue [128 to 255] maps to Z [1/255 to 1]. The normal vectors use OpenGL conventions where +X is right and +Y is up. +Z points toward the viewer. In GLSL, this vector would be unpacked like so: `vec3 normalVector = tex2D(normalMap, texCoord) * 2 - 1`. Client implementations should normalize the normal vectors before using them in lighting equations.
+A tangent space normal map. The texture contains RGB components in linear space. Each texel represents the XYZ components of a normal vector in tangent space. Red [0 to 255] maps to X [-1 to 1]. Green [0 to 255] maps to Y [-1 to 1]. Blue [128 to 255] maps to Z [1/255 to 1]. The normal vectors use OpenGL conventions where +X is right and +Y is up. +Z points toward the viewer. In GLSL, this vector would be unpacked like so: `float3 normalVector = tex2D(<sampled normal map texture value>, texCoord) * 2 - 1`. Client implementations should normalize the normal vectors before using them in lighting equations.
 
-* **Type**: `object`
+* **Type**: [`material.normalTextureInfo`](#reference-material-normaltextureinfo)
 * **Required**: No
 
 #### material.occlusionTexture
 
 The occlusion map texture. The occlusion values are sampled from the R channel. Higher values indicate areas that should receive full indirect lighting and lower values indicate no indirect lighting. These values are linear. If other channels are present (GBA), they are ignored for occlusion calculations.
 
-* **Type**: `object`
+* **Type**: [`material.occlusionTextureInfo`](#reference-material-occlusiontextureinfo)
 * **Required**: No
 
 #### material.emissiveTexture
 
 The emissive map controls the color and intensity of the light being emitted by the material. This texture contains RGB components in sRGB color space. If a fourth component (A) is present, it is ignored.
 
-* **Type**: `object`
+* **Type**: [`textureInfo`](#reference-textureinfo)
 * **Required**: No
 
 #### material.emissiveFactor
@@ -2746,8 +3054,212 @@ Specifies whether the material is double sided. When this value is false, back-f
 
 
 ---------------------------------------
+<a name="reference-material-normaltextureinfo"></a>
+### Material Normal Texture Info
+
+Reference to a texture.
+
+**Properties**
+
+|   |Type|Description|Required|
+|---|----|-----------|--------|
+|**index**|`integer`|The index of the texture.| :white_check_mark: Yes|
+|**texCoord**|`integer`|The set index of texture's TEXCOORD attribute used for texture coordinate mapping.|No, default: `0`|
+|**scale**|`number`|The scalar multiplier applied to each normal vector of the normal texture.|No, default: `1`|
+|**extensions**|[`extension`](#reference-extension)|Dictionary object with extension-specific objects.|No|
+|**extras**|[`extras`](#reference-extras)|Application-specific data.|No|
+
+Additional properties are allowed.
+
+* **JSON schema**: [material.normalTextureInfo.schema.json](schema/material.normalTextureInfo.schema.json)
+
+#### material.normalTextureInfo.index :white_check_mark: 
+
+The index of the texture.
+
+* **Type**: `integer`
+* **Required**: Yes
+* **Minimum**: ` >= 0`
+
+#### material.normalTextureInfo.texCoord
+
+This integer value is used to construct a string in the format `TEXCOORD_<set index>` which is a reference to a key in mesh.primitives.attributes (e.g. A value of `0` corresponds to `TEXCOORD_0`). Mesh must have corresponding texture coordinate attributes for the material to be applicable to it.
+
+* **Type**: `integer`
+* **Required**: No, default: `0`
+* **Minimum**: ` >= 0`
+
+#### material.normalTextureInfo.scale
+
+The scalar multiplier applied to each normal vector of the texture. This value scales the normal vector using the formula: `scaledNormal =  normalize((<sampled normal texture value> * 2.0 - 1.0) * vec3(<normal scale>, <normal scale>, 1.0))`. This value is ignored if normalTexture is not specified. This value is linear.
+
+* **Type**: `number`
+* **Required**: No, default: `1`
+
+#### material.normalTextureInfo.extensions
+
+Dictionary object with extension-specific objects.
+
+* **Type**: [`extension`](#reference-extension)
+* **Required**: No
+* **Type of each property**: Extension
+
+#### material.normalTextureInfo.extras
+
+Application-specific data.
+
+* **Type**: [`extras`](#reference-extras)
+* **Required**: No
+
+
+
+
+---------------------------------------
+<a name="reference-material-occlusiontextureinfo"></a>
+### Material Occlusion Texture Info
+
+Reference to a texture.
+
+**Properties**
+
+|   |Type|Description|Required|
+|---|----|-----------|--------|
+|**index**|`integer`|The index of the texture.| :white_check_mark: Yes|
+|**texCoord**|`integer`|The set index of texture's TEXCOORD attribute used for texture coordinate mapping.|No, default: `0`|
+|**strength**|`number`|A scalar multiplier controlling the amount of occlusion applied.|No, default: `1`|
+|**extensions**|[`extension`](#reference-extension)|Dictionary object with extension-specific objects.|No|
+|**extras**|[`extras`](#reference-extras)|Application-specific data.|No|
+
+Additional properties are allowed.
+
+* **JSON schema**: [material.occlusionTextureInfo.schema.json](schema/material.occlusionTextureInfo.schema.json)
+
+#### material.occlusionTextureInfo.index :white_check_mark: 
+
+The index of the texture.
+
+* **Type**: `integer`
+* **Required**: Yes
+* **Minimum**: ` >= 0`
+
+#### material.occlusionTextureInfo.texCoord
+
+This integer value is used to construct a string in the format `TEXCOORD_<set index>` which is a reference to a key in mesh.primitives.attributes (e.g. A value of `0` corresponds to `TEXCOORD_0`). Mesh must have corresponding texture coordinate attributes for the material to be applicable to it.
+
+* **Type**: `integer`
+* **Required**: No, default: `0`
+* **Minimum**: ` >= 0`
+
+#### material.occlusionTextureInfo.strength
+
+A scalar multiplier controlling the amount of occlusion applied. A value of 0.0 means no occlusion. A value of 1.0 means full occlusion. This value affects the resulting color using the formula: `occludedColor = lerp(color, color * <sampled occlusion texture value>, <occlusion strength>)`. This value is ignored if the corresponding texture is not specified. This value is linear.
+
+* **Type**: `number`
+* **Required**: No, default: `1`
+* **Minimum**: ` >= 0`
+* **Maximum**: ` <= 1`
+
+#### material.occlusionTextureInfo.extensions
+
+Dictionary object with extension-specific objects.
+
+* **Type**: [`extension`](#reference-extension)
+* **Required**: No
+* **Type of each property**: Extension
+
+#### material.occlusionTextureInfo.extras
+
+Application-specific data.
+
+* **Type**: [`extras`](#reference-extras)
+* **Required**: No
+
+
+
+
+---------------------------------------
+<a name="reference-material-pbrmetallicroughness"></a>
+### Material PBR Metallic Roughness
+
+A set of parameter values that are used to define the metallic-roughness material model from Physically-Based Rendering (PBR) methodology.
+
+**Properties**
+
+|   |Type|Description|Required|
+|---|----|-----------|--------|
+|**baseColorFactor**|`number` `[4]`|The material's base color factor.|No, default: `[1,1,1,1]`|
+|**baseColorTexture**|[`textureInfo`](#reference-textureinfo)|The base color texture.|No|
+|**metallicFactor**|`number`|The metalness of the material.|No, default: `1`|
+|**roughnessFactor**|`number`|The roughness of the material.|No, default: `1`|
+|**metallicRoughnessTexture**|[`textureInfo`](#reference-textureinfo)|The metallic-roughness texture.|No|
+|**extensions**|[`extension`](#reference-extension)|Dictionary object with extension-specific objects.|No|
+|**extras**|[`extras`](#reference-extras)|Application-specific data.|No|
+
+Additional properties are allowed.
+
+* **JSON schema**: [material.pbrMetallicRoughness.schema.json](schema/material.pbrMetallicRoughness.schema.json)
+
+#### material.pbrMetallicRoughness.baseColorFactor
+
+The RGBA components of the base color of the material. The fourth component (A) is the alpha coverage of the material. The `alphaMode` property specifies how alpha is interpreted. These values are linear. If a baseColorTexture is specified, this value is multiplied with the texel values.
+
+* **Type**: `number` `[4]`
+   * Each element in the array must be greater than or equal to `0` and less than or equal to `1`.
+* **Required**: No, default: `[1,1,1,1]`
+
+#### material.pbrMetallicRoughness.baseColorTexture
+
+The base color texture. This texture contains RGB(A) components in sRGB color space. The first three components (RGB) specify the base color of the material. If the fourth component (A) is present, it represents the alpha coverage of the material. Otherwise, an alpha of 1.0 is assumed. The `alphaMode` property specifies how alpha is interpreted. The stored texels must not be premultiplied.
+
+* **Type**: [`textureInfo`](#reference-textureinfo)
+* **Required**: No
+
+#### material.pbrMetallicRoughness.metallicFactor
+
+The metalness of the material. A value of 1.0 means the material is a metal. A value of 0.0 means the material is a dielectric. Values in between are for blending between metals and dielectrics such as dirty metallic surfaces. This value is linear. If a metallicRoughnessTexture is specified, this value is multiplied with the metallic texel values.
+
+* **Type**: `number`
+* **Required**: No, default: `1`
+* **Minimum**: ` >= 0`
+* **Maximum**: ` <= 1`
+
+#### material.pbrMetallicRoughness.roughnessFactor
+
+The roughness of the material. A value of 1.0 means the material is completely rough. A value of 0.0 means the material is completely smooth. This value is linear. If a metallicRoughnessTexture is specified, this value is multiplied with the roughness texel values.
+
+* **Type**: `number`
+* **Required**: No, default: `1`
+* **Minimum**: ` >= 0`
+* **Maximum**: ` <= 1`
+
+#### material.pbrMetallicRoughness.metallicRoughnessTexture
+
+The metallic-roughness texture. The metalness values are sampled from the B channel. The roughness values are sampled from the G channel. These values are linear. If other channels are present (R or A), they are ignored for metallic-roughness calculations.
+
+* **Type**: [`textureInfo`](#reference-textureinfo)
+* **Required**: No
+
+#### material.pbrMetallicRoughness.extensions
+
+Dictionary object with extension-specific objects.
+
+* **Type**: [`extension`](#reference-extension)
+* **Required**: No
+* **Type of each property**: Extension
+
+#### material.pbrMetallicRoughness.extras
+
+Application-specific data.
+
+* **Type**: [`extras`](#reference-extras)
+* **Required**: No
+
+
+
+
+---------------------------------------
 <a name="reference-mesh"></a>
-### mesh
+### Mesh
 
 A set of primitives to be rendered.  A node can contain one mesh.  A node's transform places the mesh in the scene.
 
@@ -2755,11 +3267,11 @@ A set of primitives to be rendered.  A node can contain one mesh.  A node's tran
 
 |   |Type|Description|Required|
 |---|----|-----------|--------|
-|**primitives**|primitive `[1-*]`|An array of primitives, each defining geometry to be rendered with a material.| :white_check_mark: Yes|
+|**primitives**|[`mesh.primitive`](#reference-mesh-primitive) `[1-*]`|An array of primitives, each defining geometry to be rendered with a material.| :white_check_mark: Yes|
 |**weights**|`number` `[1-*]`|Array of weights to be applied to the Morph Targets.|No|
 |**name**|`string`|The user-defined name of this object.|No|
-|**extensions**|`object`|Dictionary object with extension-specific objects.|No|
-|**extras**|`any`|Application-specific data.|No|
+|**extensions**|[`extension`](#reference-extension)|Dictionary object with extension-specific objects.|No|
+|**extras**|[`extras`](#reference-extras)|Application-specific data.|No|
 
 Additional properties are allowed.
 
@@ -2769,7 +3281,7 @@ Additional properties are allowed.
 
 An array of primitives, each defining geometry to be rendered with a material.
 
-* **Type**: primitive `[1-*]`
+* **Type**: [`mesh.primitive`](#reference-mesh-primitive) `[1-*]`
 * **Required**: Yes
 
 #### mesh.weights
@@ -2790,15 +3302,103 @@ The user-defined name of this object.  This is not necessarily unique, e.g., an 
 
 Dictionary object with extension-specific objects.
 
-* **Type**: `object`
+* **Type**: [`extension`](#reference-extension)
 * **Required**: No
-* **Type of each property**: extension
+* **Type of each property**: Extension
 
 #### mesh.extras
 
 Application-specific data.
 
-* **Type**: `any`
+* **Type**: [`extras`](#reference-extras)
+* **Required**: No
+
+
+
+
+---------------------------------------
+<a name="reference-mesh-primitive"></a>
+### Mesh Primitive
+
+Geometry to be rendered with the given material.
+
+**Related WebGL functions**: `drawElements()` and `drawArrays()`
+
+**Properties**
+
+|   |Type|Description|Required|
+|---|----|-----------|--------|
+|**attributes**|`object`|A dictionary object, where each key corresponds to mesh attribute semantic and each value is the index of the accessor containing attribute's data.| :white_check_mark: Yes|
+|**indices**|`integer`|The index of the accessor that contains the indices.|No|
+|**material**|`integer`|The index of the material to apply to this primitive when rendering.|No|
+|**mode**|`integer`|The type of primitives to render.|No, default: `4`|
+|**targets**|`object` `[1-*]`|An array of Morph Targets, each  Morph Target is a dictionary mapping attributes (only `POSITION`, `NORMAL`, and `TANGENT` supported) to their deviations in the Morph Target.|No|
+|**extensions**|[`extension`](#reference-extension)|Dictionary object with extension-specific objects.|No|
+|**extras**|[`extras`](#reference-extras)|Application-specific data.|No|
+
+Additional properties are allowed.
+
+* **JSON schema**: [mesh.primitive.schema.json](schema/mesh.primitive.schema.json)
+
+#### mesh.primitive.attributes :white_check_mark: 
+
+A dictionary object, where each key corresponds to mesh attribute semantic and each value is the index of the accessor containing attribute's data.
+
+* **Type**: `object`
+* **Required**: Yes
+* **Type of each property**: `integer`
+
+#### mesh.primitive.indices
+
+The index of the accessor that contains mesh indices.  When this is not defined, the primitives should be rendered without indices using `drawArrays()`.  When defined, the accessor must contain indices: the `bufferView` referenced by the accessor should have a `target` equal to 34963 (ELEMENT_ARRAY_BUFFER); `componentType` must be 5121 (UNSIGNED_BYTE), 5123 (UNSIGNED_SHORT) or 5125 (UNSIGNED_INT), the latter may require enabling additional hardware support; `type` must be `"SCALAR"`. For triangle primitives, the front face has a counter-clockwise (CCW) winding order.
+
+* **Type**: `integer`
+* **Required**: No
+* **Minimum**: ` >= 0`
+
+#### mesh.primitive.material
+
+The index of the material to apply to this primitive when rendering.
+
+* **Type**: `integer`
+* **Required**: No
+* **Minimum**: ` >= 0`
+
+#### mesh.primitive.mode
+
+The type of primitives to render. All valid values correspond to WebGL enums.
+
+* **Type**: `integer`
+* **Required**: No, default: `4`
+* **Allowed values**:
+   * `0` POINTS
+   * `1` LINES
+   * `2` LINE_LOOP
+   * `3` LINE_STRIP
+   * `4` TRIANGLES
+   * `5` TRIANGLE_STRIP
+   * `6` TRIANGLE_FAN
+
+#### mesh.primitive.targets
+
+An array of Morph Targets, each  Morph Target is a dictionary mapping attributes (only `POSITION`, `NORMAL`, and `TANGENT` supported) to their deviations in the Morph Target.
+
+* **Type**: `object` `[1-*]`
+* **Required**: No
+
+#### mesh.primitive.extensions
+
+Dictionary object with extension-specific objects.
+
+* **Type**: [`extension`](#reference-extension)
+* **Required**: No
+* **Type of each property**: Extension
+
+#### mesh.primitive.extras
+
+Application-specific data.
+
+* **Type**: [`extras`](#reference-extras)
 * **Required**: No
 
 
@@ -2806,9 +3406,9 @@ Application-specific data.
 
 ---------------------------------------
 <a name="reference-node"></a>
-### node
+### Node
 
-A node in the node hierarchy.  When the node contains [`skin`](#reference-skin), all `mesh.primitives` must contain `JOINTS_0` and `WEIGHTS_0` attributes.  A node can have either a `matrix` or any combination of `translation`/`rotation`/`scale` (TRS) properties. TRS properties are converted to matrices and postmultiplied in the `T * R * S` order to compose the transformation matrix; first the scale is applied to the vertices, then the rotation, and then the translation. If none are provided, the transform is the identity. When a node is targeted for animation (referenced by an animation.channel.target), only TRS properties may be present; `matrix` will not be present.
+A node in the node hierarchy.  When the node contains `skin`, all `mesh.primitives` must contain `JOINTS_0` and `WEIGHTS_0` attributes.  A node can have either a `matrix` or any combination of `translation`/`rotation`/`scale` (TRS) properties. TRS properties are converted to matrices and postmultiplied in the `T * R * S` order to compose the transformation matrix; first the scale is applied to the vertices, then the rotation, and then the translation. If none are provided, the transform is the identity. When a node is targeted for animation (referenced by an animation.channel.target), only TRS properties may be present; `matrix` will not be present.
 
 **Properties**
 
@@ -2824,8 +3424,8 @@ A node in the node hierarchy.  When the node contains [`skin`](#reference-skin),
 |**translation**|`number` `[3]`|The node's translation along the x, y, and z axes.|No, default: `[0,0,0]`|
 |**weights**|`number` `[1-*]`|The weights of the instantiated Morph Target. Number of elements must match number of Morph Targets of used mesh.|No|
 |**name**|`string`|The user-defined name of this object.|No|
-|**extensions**|`object`|Dictionary object with extension-specific objects.|No|
-|**extras**|`any`|Application-specific data.|No|
+|**extensions**|[`extension`](#reference-extension)|Dictionary object with extension-specific objects.|No|
+|**extras**|[`extras`](#reference-extras)|Application-specific data.|No|
 
 Additional properties are allowed.
 
@@ -2912,453 +3512,15 @@ The user-defined name of this object.  This is not necessarily unique, e.g., an 
 
 Dictionary object with extension-specific objects.
 
-* **Type**: `object`
+* **Type**: [`extension`](#reference-extension)
 * **Required**: No
-* **Type of each property**: extension
+* **Type of each property**: Extension
 
 #### node.extras
 
 Application-specific data.
 
-* **Type**: `any`
-* **Required**: No
-
-
-
-
----------------------------------------
-<a name="reference-normaltextureinfo"></a>
-### normalTextureInfo
-
-Reference to a texture.
-
-**Properties**
-
-|   |Type|Description|Required|
-|---|----|-----------|--------|
-|**index**|`integer`|The index of the texture.| :white_check_mark: Yes|
-|**texCoord**|`integer`|The set index of texture's TEXCOORD attribute used for texture coordinate mapping.|No, default: `0`|
-|**scale**|`number`|The scalar multiplier applied to each normal vector of the normal texture.|No, default: `1`|
-|**extensions**|`object`|Dictionary object with extension-specific objects.|No|
-|**extras**|`any`|Application-specific data.|No|
-
-Additional properties are allowed.
-
-* **JSON schema**: [material.normalTextureInfo.schema.json](schema/material.normalTextureInfo.schema.json)
-
-#### normalTextureInfo.index :white_check_mark: 
-
-The index of the texture.
-
-* **Type**: `integer`
-* **Required**: Yes
-* **Minimum**: ` >= 0`
-
-#### normalTextureInfo.texCoord
-
-This integer value is used to construct a string in the format TEXCOORD_<set index> which is a reference to a key in mesh.primitives.attributes (e.g. A value of 0 corresponds to TEXCOORD_0).
-
-* **Type**: `integer`
-* **Required**: No, default: `0`
-* **Minimum**: ` >= 0`
-
-#### normalTextureInfo.scale
-
-The scalar multiplier applied to each normal vector of the texture. This value scales the normal vector using the formula: `scaledNormal =  normalize((<sampled normal texture value> * 2.0 - 1.0) * vec3(<normal scale>, <normal scale>, 1.0))`. This value is ignored if normalTexture is not specified. This value is linear.
-
-* **Type**: `number`
-* **Required**: No, default: `1`
-
-#### normalTextureInfo.extensions
-
-Dictionary object with extension-specific objects.
-
-* **Type**: `object`
-* **Required**: No
-* **Type of each property**: extension
-
-#### normalTextureInfo.extras
-
-Application-specific data.
-
-* **Type**: `any`
-* **Required**: No
-
-
-
-
----------------------------------------
-<a name="reference-occlusiontextureinfo"></a>
-### occlusionTextureInfo
-
-Reference to a texture.
-
-**Properties**
-
-|   |Type|Description|Required|
-|---|----|-----------|--------|
-|**index**|`integer`|The index of the texture.| :white_check_mark: Yes|
-|**texCoord**|`integer`|The set index of texture's TEXCOORD attribute used for texture coordinate mapping.|No, default: `0`|
-|**strength**|`number`|A scalar multiplier controlling the amount of occlusion applied.|No, default: `1`|
-|**extensions**|`object`|Dictionary object with extension-specific objects.|No|
-|**extras**|`any`|Application-specific data.|No|
-
-Additional properties are allowed.
-
-* **JSON schema**: [material.occlusionTextureInfo.schema.json](schema/material.occlusionTextureInfo.schema.json)
-
-#### occlusionTextureInfo.index :white_check_mark: 
-
-The index of the texture.
-
-* **Type**: `integer`
-* **Required**: Yes
-* **Minimum**: ` >= 0`
-
-#### occlusionTextureInfo.texCoord
-
-This integer value is used to construct a string in the format TEXCOORD_<set index> which is a reference to a key in mesh.primitives.attributes (e.g. A value of 0 corresponds to TEXCOORD_0).
-
-* **Type**: `integer`
-* **Required**: No, default: `0`
-* **Minimum**: ` >= 0`
-
-#### occlusionTextureInfo.strength
-
-A scalar multiplier controlling the amount of occlusion applied. A value of 0.0 means no occlusion. A value of 1.0 means full occlusion. This value affects the resulting color using the formula: `occludedColor = lerp(color, color * <sampled occlusion texture value>, <occlusion strength>)`. This value is ignored if the corresponding texture is not specified. This value is linear.
-
-* **Type**: `number`
-* **Required**: No, default: `1`
-* **Minimum**: ` >= 0`
-* **Maximum**: ` <= 1`
-
-#### occlusionTextureInfo.extensions
-
-Dictionary object with extension-specific objects.
-
-* **Type**: `object`
-* **Required**: No
-* **Type of each property**: extension
-
-#### occlusionTextureInfo.extras
-
-Application-specific data.
-
-* **Type**: `any`
-* **Required**: No
-
-
-
-
----------------------------------------
-<a name="reference-orthographic"></a>
-### orthographic
-
-An orthographic camera containing properties to create an orthographic projection matrix.
-
-**Properties**
-
-|   |Type|Description|Required|
-|---|----|-----------|--------|
-|**xmag**|`number`|The floating-point horizontal magnification of the view.| :white_check_mark: Yes|
-|**ymag**|`number`|The floating-point vertical magnification of the view.| :white_check_mark: Yes|
-|**zfar**|`number`|The floating-point distance to the far clipping plane. `zfar` must be greater than `znear`.| :white_check_mark: Yes|
-|**znear**|`number`|The floating-point distance to the near clipping plane.| :white_check_mark: Yes|
-|**extensions**|`object`|Dictionary object with extension-specific objects.|No|
-|**extras**|`any`|Application-specific data.|No|
-
-Additional properties are allowed.
-
-* **JSON schema**: [camera.orthographic.schema.json](schema/camera.orthographic.schema.json)
-
-#### orthographic.xmag :white_check_mark: 
-
-The floating-point horizontal magnification of the view.
-
-* **Type**: `number`
-* **Required**: Yes
-
-#### orthographic.ymag :white_check_mark: 
-
-The floating-point vertical magnification of the view.
-
-* **Type**: `number`
-* **Required**: Yes
-
-#### orthographic.zfar :white_check_mark: 
-
-The floating-point distance to the far clipping plane. `zfar` must be greater than `znear`.
-
-* **Type**: `number`
-* **Required**: Yes
-* **Minimum**: ` > 0`
-
-#### orthographic.znear :white_check_mark: 
-
-The floating-point distance to the near clipping plane.
-
-* **Type**: `number`
-* **Required**: Yes
-* **Minimum**: ` >= 0`
-
-#### orthographic.extensions
-
-Dictionary object with extension-specific objects.
-
-* **Type**: `object`
-* **Required**: No
-* **Type of each property**: extension
-
-#### orthographic.extras
-
-Application-specific data.
-
-* **Type**: `any`
-* **Required**: No
-
-
-
-
----------------------------------------
-<a name="reference-pbrmetallicroughness"></a>
-### pbrMetallicRoughness
-
-A set of parameter values that are used to define the metallic-roughness material model from Physically-Based Rendering (PBR) methodology.
-
-**Properties**
-
-|   |Type|Description|Required|
-|---|----|-----------|--------|
-|**baseColorFactor**|`number` `[4]`|The material's base color factor.|No, default: `[1,1,1,1]`|
-|**baseColorTexture**|`object`|The base color texture.|No|
-|**metallicFactor**|`number`|The metalness of the material.|No, default: `1`|
-|**roughnessFactor**|`number`|The roughness of the material.|No, default: `1`|
-|**metallicRoughnessTexture**|`object`|The metallic-roughness texture.|No|
-|**extensions**|`object`|Dictionary object with extension-specific objects.|No|
-|**extras**|`any`|Application-specific data.|No|
-
-Additional properties are allowed.
-
-* **JSON schema**: [material.pbrMetallicRoughness.schema.json](schema/material.pbrMetallicRoughness.schema.json)
-
-#### pbrMetallicRoughness.baseColorFactor
-
-The RGBA components of the base color of the material. The fourth component (A) is the alpha coverage of the material. The `alphaMode` property specifies how alpha is interpreted. These values are linear. If a baseColorTexture is specified, this value is multiplied with the texel values.
-
-* **Type**: `number` `[4]`
-   * Each element in the array must be greater than or equal to `0` and less than or equal to `1`.
-* **Required**: No, default: `[1,1,1,1]`
-
-#### pbrMetallicRoughness.baseColorTexture
-
-The base color texture. This texture contains RGB(A) components in sRGB color space. The first three components (RGB) specify the base color of the material. If the fourth component (A) is present, it represents the alpha coverage of the material. Otherwise, an alpha of 1.0 is assumed. The `alphaMode` property specifies how alpha is interpreted. The stored texels must not be premultiplied.
-
-* **Type**: `object`
-* **Required**: No
-
-#### pbrMetallicRoughness.metallicFactor
-
-The metalness of the material. A value of 1.0 means the material is a metal. A value of 0.0 means the material is a dielectric. Values in between are for blending between metals and dielectrics such as dirty metallic surfaces. This value is linear. If a metallicRoughnessTexture is specified, this value is multiplied with the metallic texel values.
-
-* **Type**: `number`
-* **Required**: No, default: `1`
-* **Minimum**: ` >= 0`
-* **Maximum**: ` <= 1`
-
-#### pbrMetallicRoughness.roughnessFactor
-
-The roughness of the material. A value of 1.0 means the material is completely rough. A value of 0.0 means the material is completely smooth. This value is linear. If a metallicRoughnessTexture is specified, this value is multiplied with the roughness texel values.
-
-* **Type**: `number`
-* **Required**: No, default: `1`
-* **Minimum**: ` >= 0`
-* **Maximum**: ` <= 1`
-
-#### pbrMetallicRoughness.metallicRoughnessTexture
-
-The metallic-roughness texture. The metalness values are sampled from the B channel. The roughness values are sampled from the G channel. These values are linear. If other channels are present (R or A), they are ignored for metallic-roughness calculations.
-
-* **Type**: `object`
-* **Required**: No
-
-#### pbrMetallicRoughness.extensions
-
-Dictionary object with extension-specific objects.
-
-* **Type**: `object`
-* **Required**: No
-* **Type of each property**: extension
-
-#### pbrMetallicRoughness.extras
-
-Application-specific data.
-
-* **Type**: `any`
-* **Required**: No
-
-
-
-
----------------------------------------
-<a name="reference-perspective"></a>
-### perspective
-
-A perspective camera containing properties to create a perspective projection matrix.
-
-**Properties**
-
-|   |Type|Description|Required|
-|---|----|-----------|--------|
-|**aspectRatio**|`number`|The floating-point aspect ratio of the field of view.|No|
-|**yfov**|`number`|The floating-point vertical field of view in radians.| :white_check_mark: Yes|
-|**zfar**|`number`|The floating-point distance to the far clipping plane.|No|
-|**znear**|`number`|The floating-point distance to the near clipping plane.| :white_check_mark: Yes|
-|**extensions**|`object`|Dictionary object with extension-specific objects.|No|
-|**extras**|`any`|Application-specific data.|No|
-
-Additional properties are allowed.
-
-* **JSON schema**: [camera.perspective.schema.json](schema/camera.perspective.schema.json)
-
-#### perspective.aspectRatio
-
-The floating-point aspect ratio of the field of view. When this is undefined, the aspect ratio of the canvas is used.
-
-* **Type**: `number`
-* **Required**: No
-* **Minimum**: ` > 0`
-
-#### perspective.yfov :white_check_mark: 
-
-The floating-point vertical field of view in radians.
-
-* **Type**: `number`
-* **Required**: Yes
-* **Minimum**: ` > 0`
-
-#### perspective.zfar
-
-The floating-point distance to the far clipping plane. When defined, `zfar` must be greater than `znear`. If `zfar` is undefined, runtime must use infinite projection matrix.
-
-* **Type**: `number`
-* **Required**: No
-* **Minimum**: ` > 0`
-
-#### perspective.znear :white_check_mark: 
-
-The floating-point distance to the near clipping plane.
-
-* **Type**: `number`
-* **Required**: Yes
-* **Minimum**: ` > 0`
-
-#### perspective.extensions
-
-Dictionary object with extension-specific objects.
-
-* **Type**: `object`
-* **Required**: No
-* **Type of each property**: extension
-
-#### perspective.extras
-
-Application-specific data.
-
-* **Type**: `any`
-* **Required**: No
-
-
-
-
----------------------------------------
-<a name="reference-primitive"></a>
-### primitive
-
-Geometry to be rendered with the given material.
-
-**Related WebGL functions**: `drawElements()` and `drawArrays()`
-
-**Properties**
-
-|   |Type|Description|Required|
-|---|----|-----------|--------|
-|**attributes**|`object`|A dictionary object, where each key corresponds to mesh attribute semantic and each value is the index of the accessor containing attribute's data.| :white_check_mark: Yes|
-|**indices**|`integer`|The index of the accessor that contains the indices.|No|
-|**material**|`integer`|The index of the material to apply to this primitive when rendering.|No|
-|**mode**|`integer`|The type of primitives to render.|No, default: `4`|
-|**targets**|`object` `[1-*]`|An array of Morph Targets, each  Morph Target is a dictionary mapping attributes (only `POSITION`, `NORMAL`, and `TANGENT` supported) to their deviations in the Morph Target.|No|
-|**extensions**|`object`|Dictionary object with extension-specific objects.|No|
-|**extras**|`any`|Application-specific data.|No|
-
-Additional properties are allowed.
-
-* **JSON schema**: [mesh.primitive.schema.json](schema/mesh.primitive.schema.json)
-
-#### primitive.attributes :white_check_mark: 
-
-A dictionary object, where each key corresponds to mesh attribute semantic and each value is the index of the accessor containing attribute's data.
-
-* **Type**: `object`
-* **Required**: Yes
-* **Type of each property**: `integer`
-
-#### primitive.indices
-
-The index of the accessor that contains mesh indices.  When this is not defined, the primitives should be rendered without indices using `drawArrays()`.  When defined, the accessor must contain indices: the [`bufferView`](#reference-bufferview) referenced by the accessor should have a [`target`](#reference-target) equal to 34963 (ELEMENT_ARRAY_BUFFER); `componentType` must be 5121 (UNSIGNED_BYTE), 5123 (UNSIGNED_SHORT) or 5125 (UNSIGNED_INT), the latter may require enabling additional hardware support; `type` must be `"SCALAR"`. For triangle primitives, the front face has a counter-clockwise (CCW) winding order.
-
-Values of the index accessor must not include the maximum value for the given component type, which triggers primitive restart in several graphics APIs and would require client implementations to rebuild the index buffer. Primitive restart values are disallowed and all index values must refer to actual vertices.
-
-* **Type**: `integer`
-* **Required**: No
-* **Minimum**: ` >= 0`
-* **Maximum**:
-   * BYTE `< 255`
-   * UNSIGNED_SHORT `< 65535`
-   * UNSIGNED_INT `< 4294967295`
-
-#### primitive.material
-
-The index of the material to apply to this primitive when rendering.
-
-* **Type**: `integer`
-* **Required**: No
-* **Minimum**: ` >= 0`
-
-#### primitive.mode
-
-The type of primitives to render. All valid values correspond to WebGL enums.
-
-* **Type**: `integer`
-* **Required**: No, default: `4`
-* **Allowed values**:
-   * `0` POINTS
-   * `1` LINES
-   * `2` LINE_LOOP
-   * `3` LINE_STRIP
-   * `4` TRIANGLES
-   * `5` TRIANGLE_STRIP
-   * `6` TRIANGLE_FAN
-
-#### primitive.targets
-
-An array of Morph Targets, each  Morph Target is a dictionary mapping attributes (only `POSITION`, `NORMAL`, and `TANGENT` supported) to their deviations in the Morph Target.
-
-* **Type**: `object` `[1-*]`
-* **Required**: No
-
-#### primitive.extensions
-
-Dictionary object with extension-specific objects.
-
-* **Type**: `object`
-* **Required**: No
-* **Type of each property**: extension
-
-#### primitive.extras
-
-Application-specific data.
-
-* **Type**: `any`
+* **Type**: [`extras`](#reference-extras)
 * **Required**: No
 
 
@@ -3366,7 +3528,7 @@ Application-specific data.
 
 ---------------------------------------
 <a name="reference-sampler"></a>
-### sampler
+### Sampler
 
 Texture sampler properties for filtering and wrapping modes.
 
@@ -3381,8 +3543,8 @@ Texture sampler properties for filtering and wrapping modes.
 |**wrapS**|`integer`|s wrapping mode.|No, default: `10497`|
 |**wrapT**|`integer`|t wrapping mode.|No, default: `10497`|
 |**name**|`string`|The user-defined name of this object.|No|
-|**extensions**|`object`|Dictionary object with extension-specific objects.|No|
-|**extras**|`any`|Application-specific data.|No|
+|**extensions**|[`extension`](#reference-extension)|Dictionary object with extension-specific objects.|No|
+|**extras**|[`extras`](#reference-extras)|Application-specific data.|No|
 
 Additional properties are allowed.
 
@@ -3449,15 +3611,15 @@ The user-defined name of this object.  This is not necessarily unique, e.g., an 
 
 Dictionary object with extension-specific objects.
 
-* **Type**: `object`
+* **Type**: [`extension`](#reference-extension)
 * **Required**: No
-* **Type of each property**: extension
+* **Type of each property**: Extension
 
 #### sampler.extras
 
 Application-specific data.
 
-* **Type**: `any`
+* **Type**: [`extras`](#reference-extras)
 * **Required**: No
 
 
@@ -3465,7 +3627,7 @@ Application-specific data.
 
 ---------------------------------------
 <a name="reference-scene"></a>
-### scene
+### Scene
 
 The root nodes of a scene.
 
@@ -3475,8 +3637,8 @@ The root nodes of a scene.
 |---|----|-----------|--------|
 |**nodes**|`integer` `[1-*]`|The indices of each root node.|No|
 |**name**|`string`|The user-defined name of this object.|No|
-|**extensions**|`object`|Dictionary object with extension-specific objects.|No|
-|**extras**|`any`|Application-specific data.|No|
+|**extensions**|[`extension`](#reference-extension)|Dictionary object with extension-specific objects.|No|
+|**extras**|[`extras`](#reference-extras)|Application-specific data.|No|
 
 Additional properties are allowed.
 
@@ -3502,15 +3664,15 @@ The user-defined name of this object.  This is not necessarily unique, e.g., an 
 
 Dictionary object with extension-specific objects.
 
-* **Type**: `object`
+* **Type**: [`extension`](#reference-extension)
 * **Required**: No
-* **Type of each property**: extension
+* **Type of each property**: Extension
 
 #### scene.extras
 
 Application-specific data.
 
-* **Type**: `any`
+* **Type**: [`extras`](#reference-extras)
 * **Required**: No
 
 
@@ -3518,7 +3680,7 @@ Application-specific data.
 
 ---------------------------------------
 <a name="reference-skin"></a>
-### skin
+### Skin
 
 Joints and matrices defining a skin.
 
@@ -3530,8 +3692,8 @@ Joints and matrices defining a skin.
 |**skeleton**|`integer`|The index of the node used as a skeleton root. When undefined, joints transforms resolve to scene root.|No|
 |**joints**|`integer` `[1-*]`|Indices of skeleton nodes, used as joints in this skin.| :white_check_mark: Yes|
 |**name**|`string`|The user-defined name of this object.|No|
-|**extensions**|`object`|Dictionary object with extension-specific objects.|No|
-|**extras**|`any`|Application-specific data.|No|
+|**extensions**|[`extension`](#reference-extension)|Dictionary object with extension-specific objects.|No|
+|**extras**|[`extras`](#reference-extras)|Application-specific data.|No|
 
 Additional properties are allowed.
 
@@ -3573,132 +3735,15 @@ The user-defined name of this object.  This is not necessarily unique, e.g., an 
 
 Dictionary object with extension-specific objects.
 
-* **Type**: `object`
+* **Type**: [`extension`](#reference-extension)
 * **Required**: No
-* **Type of each property**: extension
+* **Type of each property**: Extension
 
 #### skin.extras
 
 Application-specific data.
 
-* **Type**: `any`
-* **Required**: No
-
-
-
-
----------------------------------------
-<a name="reference-sparse"></a>
-### sparse
-
-Sparse storage of attributes that deviate from their initialization value.
-
-**Properties**
-
-|   |Type|Description|Required|
-|---|----|-----------|--------|
-|**count**|`integer`|Number of entries stored in the sparse array.| :white_check_mark: Yes|
-|**indices**|`object`|Index array of size `count` that points to those accessor attributes that deviate from their initialization value. Indices must strictly increase.| :white_check_mark: Yes|
-|**values**|`object`|Array of size `count` times number of components, storing the displaced accessor attributes pointed by [`indices`](#reference-indices). Substituted values must have the same `componentType` and number of components as the base accessor.| :white_check_mark: Yes|
-|**extensions**|`object`|Dictionary object with extension-specific objects.|No|
-|**extras**|`any`|Application-specific data.|No|
-
-Additional properties are allowed.
-
-* **JSON schema**: [accessor.sparse.schema.json](schema/accessor.sparse.schema.json)
-
-#### sparse.count :white_check_mark: 
-
-The number of attributes encoded in this sparse accessor.
-
-* **Type**: `integer`
-* **Required**: Yes
-* **Minimum**: ` >= 1`
-
-#### sparse.indices :white_check_mark: 
-
-Index array of size `count` that points to those accessor attributes that deviate from their initialization value. Indices must strictly increase.
-
-* **Type**: `object`
-* **Required**: Yes
-
-#### sparse.values :white_check_mark: 
-
-Array of size `count` times number of components, storing the displaced accessor attributes pointed by [`indices`](#reference-indices). Substituted values must have the same `componentType` and number of components as the base accessor.
-
-* **Type**: `object`
-* **Required**: Yes
-
-#### sparse.extensions
-
-Dictionary object with extension-specific objects.
-
-* **Type**: `object`
-* **Required**: No
-* **Type of each property**: extension
-
-#### sparse.extras
-
-Application-specific data.
-
-* **Type**: `any`
-* **Required**: No
-
-
-
-
----------------------------------------
-<a name="reference-target"></a>
-### target
-
-The index of the node and TRS property that an animation channel targets.
-
-**Properties**
-
-|   |Type|Description|Required|
-|---|----|-----------|--------|
-|**node**|`integer`|The index of the node to target.|No|
-|**path**|`string`|The name of the node's TRS property to modify, or the "weights" of the Morph Targets it instantiates. For the "translation" property, the values that are provided by the sampler are the translation along the x, y, and z axes. For the "rotation" property, the values are a quaternion in the order (x, y, z, w), where w is the scalar. For the "scale" property, the values are the scaling factors along the x, y, and z axes.| :white_check_mark: Yes|
-|**extensions**|`object`|Dictionary object with extension-specific objects.|No|
-|**extras**|`any`|Application-specific data.|No|
-
-Additional properties are allowed.
-
-* **JSON schema**: [animation.channel.target.schema.json](schema/animation.channel.target.schema.json)
-
-#### target.node
-
-The index of the node to target.
-
-* **Type**: `integer`
-* **Required**: No
-* **Minimum**: ` >= 0`
-
-#### target.path :white_check_mark: 
-
-The name of the node's TRS property to modify, or the "weights" of the Morph Targets it instantiates. For the "translation" property, the values that are provided by the sampler are the translation along the x, y, and z axes. For the "rotation" property, the values are a quaternion in the order (x, y, z, w), where w is the scalar. For the "scale" property, the values are the scaling factors along the x, y, and z axes.
-
-* **Type**: `string`
-* **Required**: Yes
-* **Allowed values**:
-   * `"translation"`
-   * `"rotation"`
-   * `"scale"`
-   * `"weights"`
-
-#### target.extensions
-
-Dictionary object with extension-specific objects.
-
-* **Type**: `object`
-* **Required**: No
-* **Type of each property**: extension
-
-#### target.extras
-
-Application-specific data.
-
-* **Type**: `any`
+* **Type**: [`extras`](#reference-extras)
 * **Required**: No
 
 
@@ -3706,7 +3751,7 @@ Application-specific data.
 
 ---------------------------------------
 <a name="reference-texture"></a>
-### texture
+### Texture
 
 A texture and its sampler.
 
@@ -3719,8 +3764,8 @@ A texture and its sampler.
 |**sampler**|`integer`|The index of the sampler used by this texture. When undefined, a sampler with repeat wrapping and auto filtering should be used.|No|
 |**source**|`integer`|The index of the image used by this texture.|No|
 |**name**|`string`|The user-defined name of this object.|No|
-|**extensions**|`object`|Dictionary object with extension-specific objects.|No|
-|**extras**|`any`|Application-specific data.|No|
+|**extensions**|[`extension`](#reference-extension)|Dictionary object with extension-specific objects.|No|
+|**extras**|[`extras`](#reference-extras)|Application-specific data.|No|
 
 Additional properties are allowed.
 
@@ -3753,15 +3798,15 @@ The user-defined name of this object.  This is not necessarily unique, e.g., an 
 
 Dictionary object with extension-specific objects.
 
-* **Type**: `object`
+* **Type**: [`extension`](#reference-extension)
 * **Required**: No
-* **Type of each property**: extension
+* **Type of each property**: Extension
 
 #### texture.extras
 
 Application-specific data.
 
-* **Type**: `any`
+* **Type**: [`extras`](#reference-extras)
 * **Required**: No
 
 
@@ -3769,7 +3814,7 @@ Application-specific data.
 
 ---------------------------------------
 <a name="reference-textureinfo"></a>
-### textureInfo
+### Texture Info
 
 Reference to a texture.
 
@@ -3779,8 +3824,8 @@ Reference to a texture.
 |---|----|-----------|--------|
 |**index**|`integer`|The index of the texture.| :white_check_mark: Yes|
 |**texCoord**|`integer`|The set index of texture's TEXCOORD attribute used for texture coordinate mapping.|No, default: `0`|
-|**extensions**|`object`|Dictionary object with extension-specific objects.|No|
-|**extras**|`any`|Application-specific data.|No|
+|**extensions**|[`extension`](#reference-extension)|Dictionary object with extension-specific objects.|No|
+|**extras**|[`extras`](#reference-extras)|Application-specific data.|No|
 
 Additional properties are allowed.
 
@@ -3806,69 +3851,18 @@ This integer value is used to construct a string in the format `TEXCOORD_<set in
 
 Dictionary object with extension-specific objects.
 
-* **Type**: `object`
+* **Type**: [`extension`](#reference-extension)
 * **Required**: No
-* **Type of each property**: extension
+* **Type of each property**: Extension
 
 #### textureInfo.extras
 
 Application-specific data.
 
-* **Type**: `any`
+* **Type**: [`extras`](#reference-extras)
 * **Required**: No
 
 
-
-
----------------------------------------
-<a name="reference-values"></a>
-### values
-
-Array of size `accessor.sparse.count` times number of components storing the displaced accessor attributes pointed by `accessor.sparse.indices`.
-
-**Properties**
-
-|   |Type|Description|Required|
-|---|----|-----------|--------|
-|**bufferView**|`integer`|The index of the bufferView with sparse values. Referenced bufferView can't have ARRAY_BUFFER or ELEMENT_ARRAY_BUFFER target.| :white_check_mark: Yes|
-|**byteOffset**|`integer`|The offset relative to the start of the bufferView in bytes. Must be aligned.|No, default: `0`|
-|**extensions**|`object`|Dictionary object with extension-specific objects.|No|
-|**extras**|`any`|Application-specific data.|No|
-
-Additional properties are allowed.
-
-* **JSON schema**: [accessor.sparse.values.schema.json](schema/accessor.sparse.values.schema.json)
-
-#### values.bufferView :white_check_mark: 
-
-The index of the bufferView with sparse values. Referenced bufferView can't have ARRAY_BUFFER or ELEMENT_ARRAY_BUFFER target.
-
-* **Type**: `integer`
-* **Required**: Yes
-* **Minimum**: ` >= 0`
-
-#### values.byteOffset
-
-The offset relative to the start of the bufferView in bytes. Must be aligned.
-
-* **Type**: `integer`
-* **Required**: No, default: `0`
-* **Minimum**: ` >= 0`
-
-#### values.extensions
-
-Dictionary object with extension-specific objects.
-
-* **Type**: `object`
-* **Required**: No
-* **Type of each property**: extension
-
-#### values.extras
-
-Application-specific data.
-
-* **Type**: `any`
-* **Required**: No
 
 
 # Acknowledgments
