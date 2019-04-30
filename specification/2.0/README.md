@@ -1654,7 +1654,7 @@ This chunk must be padded with trailing zeros (`0x00`) to satisfy alignment requ
 
 # Properties Reference
 
-See [PROPERTIES-REFERENCE.md](.\PROPERTIES-REFERENCE.md)
+See [PROPERTIES-REFERENCE.md](PROPERTIES-REFERENCE.md)
 
 # Acknowledgments
 * Sarah Chow, Cesium
